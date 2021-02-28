@@ -65,43 +65,52 @@ class RouteHandler{
 		const password = request.body.password;
 		const email = request.body.email;
 
-		if(username === '' || username === null) {
+		if(!username || username === '') {
 			RouteResponseHandler.sendResponse(request, response, {
 				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
 				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
 				isOkay: false,
-				message: CONSTANTS.AD_SLOT_ID_MISSING,
+				message: CONSTANTS.USERNAME_NOT_FOUND,
 				response: null,
 			});
-		} else {		
+		} else if(!password || username === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.PASSWORD_NOT_FOUND,
+				response: null,
+			});
+		} else if(!email || username === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.EMAIL_NOT_FOUND,
+				response: null,
+			});
+		} 
+		else {		
 			try {
 				const data = {
 					username,
-					success_status: questions !== '' && questions !== undefined && questions.length > 0,
-					stop_survey: stopSurvey !== '' && stopSurvey !== undefined,
-					questions
+					password,
+					email
 				}
-				await queryHandler.submitFeedback(data);
+				await queryHandler.registerUser(data);
 				RouteResponseHandler.sendResponse(request, response, {
 					statusCode: CONSTANTS.SERVER_OK_HTTP_CODE,
 					statusText: CONSTANTS.SERVER_OK_HTTP_TEXT,
 					isOkay: true,
-					message: CONSTANTS.AD_SLOTS_FETCHED,
-					response: {
-						feedback_saved: true
-					}
+					message: CONSTANTS.REGISTRATION_SUCESS,
 				});
 								
 			} catch (error) {
-				console.log(error)
 				RouteResponseHandler.sendResponse(request, response, {
 					statusCode: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_CODE,
 					statusText: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_TEXT,
 					isOkay: false,
 					message: CONSTANTS.SERVER_ERROR_MESSAGE,
-					response: {
-						feedback_saved: false
-					}
 				});
 			}
 		}

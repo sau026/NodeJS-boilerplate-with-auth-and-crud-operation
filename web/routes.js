@@ -16,6 +16,7 @@ class Routes{
 	 */
 	appRoutes(){
 		this.app.post('/login', routeHandler.checkUser);
+		this.app.post('/register', routeHandler.registerUser);
 		this.app.get('/getAllUser',VerifyToken, routeHandler.getAllUser);
 		/**
 		 * Handling 404 Route
