@@ -3,6 +3,7 @@
  *  @type {string}
  *  @default
 */
+module.exports.INVALID_PARAMETER = 'Please send me correct parameter';
 module.exports.EMAIL_NOT_FOUND = 'Email can\'t be empty';
 module.exports.INVALID_EMAIL_FOUND = 'Email is invalid';
 module.exports.EMAIL_NOT_AVAILABLE = 'This email is taken';
@@ -14,6 +15,8 @@ module.exports.INVALID_CREDENTIALS = 'Invalid credentials, Please try again';
 module.exports.LOGIN_SUCESS = 'LoggedIn scessfully';
 module.exports.LOGIN_FAILED = 'Login failed, try again';
 module.exports.REGISTRATION_SUCESS = 'User registered sucessfully';
+module.exports.UPDATE_SUCESS = 'User updated sucessfully';
+module.exports.DELETION_SUCESS = 'User deleted sucessfully';
 module.exports.AD_SLOT_ID_MISSING = 'No ad refrence found, try again';
 module.exports.AD_LINK_MISSING = 'Link for the for ad is missing';
 module.exports.AD_CONTENT_MISSING = 'Ad Content is missing';

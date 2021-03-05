@@ -54,17 +54,67 @@ class QueryHandler{
 	 * @param {Object} email, password
 	 * @returns {Promise} Object
 	 */
-    getAllUser(username){
+    getAllUser(){
 		return new Promise( async (resolve, reject) => {
 			try {
 				const [DB, ObjectID] = await this.Mongodb.onConnect();
-				DB.collection(CONSTANTS.MONGODB_USER_COLLECTION_NAME).find({
-					"username": username
-				}).count( (err, result) =>{
+				const allUSer = DB.collection(CONSTANTS.MONGODB_USER_COLLECTION_NAME) 
+				allUSer.find({}).toArray(function (err, result) {
+					DB.close();
+					if (err) {
+						reject(err);
+					} else {
+						resolve(result);
+					}
+				})
+			} catch (error) {
+				reject(error)
+			}	
+		});
+	}
+
+	deleteUser(data){
+		return new Promise( async (resolve, reject) => {
+			try {
+				const params = {
+					_id:ObjectId(data)
+				}
+				const [DB, ObjectID] = await this.Mongodb.onConnect();
+				DB.collection(CONSTANTS.MONGODB_USER_COLLECTION_NAME).deleteOne(params, async (err, result) =>{
 					DB.close();
 					if( err ){
 						reject(err);
 					}
+					resolve(result.deletedCount);
+				});
+			} catch (error) {
+				reject(error)
+			}	
+		});
+	}
+
+	updateUser(userData){
+		return new Promise( async (resolve, reject) => {
+			try {
+				const id = {
+					_id:ObjectId(userData._id)
+				}
+				const updateValue = {
+				}
+				const [DB, ObjectID] = await this.Mongodb.onConnect();
+				DB.collection(CONSTANTS.MONGODB_USER_COLLECTION_NAME).updateOne(id, 
+				{	
+					$set:{
+						"username" : userData.username,
+						"password" : userData.password,
+						"email" : userData.email
+					}
+				}, 
+				async (err, result) =>{
+					DB.close();
+					if( err ){
+						reject(err);
+					} 
 					resolve(result);
 				});
 			} catch (error) {
