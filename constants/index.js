@@ -79,4 +79,4 @@ module.exports.MONGODB_USER_COLLECTION_NAME ='user';
 */
 
 module.exports.JWT_KEY = 'my_secret_key';
-module.exports.JWT_EXPIRY_SECONDS = 300; 
+module.exports.JWT_EXPIRY_SECONDS = 30000; 

@@ -63,11 +63,10 @@ class RouteHandler{
 	 * @param {expressResponseObject} response
 	 */
 	async registerUser(request, response, next){
-		console.log('saurabh register data 111111111:::::::::::::', request.file)
 		const username = request.body.username;
 		const password = request.body.password;
 		const email = request.body.email;
-		const image = request.file.path
+		// const image = request.file.path
 
 		if(!username || username === '') {
 			RouteResponseHandler.sendResponse(request, response, {
@@ -100,7 +99,7 @@ class RouteHandler{
 					username,
 					password,
 					email,
-					image
+					// image
 				}
 				await queryHandler.registerUser(data);
 				RouteResponseHandler.sendResponse(request, response, {
