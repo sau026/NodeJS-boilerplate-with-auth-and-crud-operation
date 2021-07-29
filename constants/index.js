@@ -9,12 +9,16 @@ module.exports.INVALID_EMAIL_FOUND = 'Email is invalid';
 module.exports.EMAIL_NOT_AVAILABLE = 'This email is taken';
 module.exports.EMAIL_IS_AVAILABLE = 'This email is available';
 module.exports.USERNAME_NOT_FOUND = 'Username can\'t be empty';
+module.exports.NAME_NOT_FOUND = 'Name can\'t be empty';
+module.exports.STANDARD_NOT_FOUND = 'Standard can\'t be empty';
+module.exports.PERCENTAGE_NOT_FOUND = 'Percentage can\'t be empty';
+module.exports.PASSING_YEAR_NOT_FOUND = 'Passing year can\'t be empty';
 module.exports.WRONG_PASSWORD = 'The entered password is wrong';
 module.exports.PASSWORD_NOT_FOUND = 'password can\'t be empty';
 module.exports.INVALID_CREDENTIALS = 'Invalid credentials, Please try again';
 module.exports.LOGIN_SUCESS = 'LoggedIn scessfully';
 module.exports.LOGIN_FAILED = 'Login failed, try again';
-module.exports.REGISTRATION_SUCESS = 'User registered sucessfully';
+module.exports.REGISTRATION_SUCESS = 'Registered sucessfully';
 module.exports.UPDATE_SUCESS = 'User updated sucessfully';
 module.exports.DELETION_SUCESS = 'User deleted sucessfully';
 module.exports.AD_SLOT_ID_MISSING = 'No ad refrence found, try again';
@@ -71,6 +75,7 @@ module.exports.SERVER_NOT_ACCEPTABLE_HTTP_TEXT = 'not acceptable';
 module.exports.MONGODB_QUESTION_COLLECTION_NAME ='questions';
 module.exports.MONGODB_FEEDBACK_COLLECTION_NAME ='feedback';
 module.exports.MONGODB_USER_COLLECTION_NAME ='user';
+module.exports.MONGODB_STUDENT_COLLECTION_NAME ='student';
 
 /* JWT related constants starts */
 /** @constant
