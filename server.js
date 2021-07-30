@@ -15,6 +15,7 @@ const Routes = require('./web/routes');
 class Server {
     constructor() {
         // Creating an Object of the express app
+        this.Mongodb = require("./config/db");
         this.app = express();
     }
 

@@ -31,8 +31,11 @@ class RouteHandler{
 			})
 		} else{
 			try{
-				await queryHandler.checkUser(username, password);
-				const token = jwt.sign({ username }, CONSTANTS.JWT_KEY, {
+				const result = await queryHandler.checkUser(username, password);
+				const token = jwt.sign({ 
+					'username' : username,
+					'id' : result[0]._id
+				}, CONSTANTS.JWT_KEY, {
 					algorithm: "HS256",
 					expiresIn: CONSTANTS.JWT_EXPIRY_SECONDS,
 				})
@@ -120,6 +123,81 @@ class RouteHandler{
 		}
 	}
 
+	/**
+	 * Responsible for inserting user into DB
+	 * @param {expressRequestObject} request
+	 * @param {expressResponseObject} response
+	 */
+	 async addStudent(request, response, next){
+		const name = request.body.name;
+		const standard = request.body.standard;
+		const percentage = request.body.percentage;
+		const passingYear = request.body.passingYear;
+		const addedBy = request.userId;
+
+		// const image = request.file.path
+
+		if(!name || name === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.NAME_NOT_FOUND,
+				response: null,
+			});
+		} else if(!standard || standard === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.STANDARD_NOT_FOUND,
+				response: null,
+			});
+		} else if(!percentage || percentage === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.PERCENTAGE_NOT_FOUND,
+				response: null,
+			});
+		} else if(!passingYear || passingYear === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.PASSING_YEAR_NOT_FOUND,
+				response: null,
+			});
+		} 
+		else {		
+			try {
+				const data = {
+					name,
+					standard,
+					passingYear,
+					percentage,
+					addedBy
+				}
+				await queryHandler.addStudent(data);
+				RouteResponseHandler.sendResponse(request, response, {
+					statusCode: CONSTANTS.SERVER_OK_HTTP_CODE,
+					statusText: CONSTANTS.SERVER_OK_HTTP_TEXT,
+					isOkay: true,
+					message: CONSTANTS.REGISTRATION_SUCESS,
+				});
+								
+			} catch (error) {
+				RouteResponseHandler.sendResponse(request, response, {
+					statusCode: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_CODE,
+					statusText: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_TEXT,
+					isOkay: false,
+					message: CONSTANTS.SERVER_ERROR_MESSAGE,
+				});
+			}
+		}
+	}
+
 	async getAllUser(request, response){
 			try{
 				const result = await queryHandler.getAllUser();
@@ -141,6 +219,29 @@ class RouteHandler{
 				});
 			}
 	}
+
+	
+	async getAllStudent(request, response){
+		try{
+			const result = await queryHandler.getAllStudent();
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_OK_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_OK_HTTP_TEXT,
+				isOkay: true,
+				response: {
+					data: result					
+				} ,
+			});
+		} catch(error){
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: error,
+				response: null,
+			});
+		}
+}
 
 	/**
 	 * Responsible for editing user from DB
@@ -206,6 +307,91 @@ class RouteHandler{
 	}
 
 	/**
+	 * Responsible for editing user from DB
+	 * @param {expressRequestObject} request
+	 * @param {expressResponseObject} response
+	 */
+	 async updateStudent(request, response){
+		const id = request.body._id;
+		const name = request.body.name;
+		const standard = request.body.standard;
+		const percentage = request.body.percentage;
+		const passingYear = request.body.passingYear;
+
+		if(!id || id === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.NAME_NOT_FOUND,
+				response: null,
+			});
+		} else if(!name || name === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.NAME_NOT_FOUND,
+				response: null,
+			});
+		} else if(!standard || standard === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.STANDARD_NOT_FOUND,
+				response: null,
+			});
+		} else if(!percentage || percentage === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.PERCENTAGE_NOT_FOUND,
+				response: null,
+			});
+		} else if(!passingYear || passingYear === '') {
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.PASSING_YEAR_NOT_FOUND,
+				response: null,
+			});
+		} 
+		else{
+			try{
+				const data = {
+					id,
+					name,
+					standard,
+					passingYear,
+					percentage,
+				}
+
+				const result = await queryHandler.updateStudent(data);
+				RouteResponseHandler.sendResponse(request, response, {
+					statusCode: CONSTANTS.SERVER_OK_HTTP_CODE,
+					statusText: CONSTANTS.SERVER_OK_HTTP_TEXT,
+					isOkay: true,
+					message: CONSTANTS.UPDATE_SUCESS,
+					response: {
+						data: result					
+					} ,
+				});
+			} catch(error){
+				RouteResponseHandler.sendResponse(request, response, {
+					statusCode: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_CODE,
+					statusText: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_TEXT,
+					isOkay: false,
+					message: error,
+					response: null,
+				});
+			}
+		}
+	}
+
+	/**
 	 * Responsible for deleting user from DB
 	 * @param {expressRequestObject} request
 	 * @param {expressResponseObject} response
@@ -223,6 +409,45 @@ class RouteHandler{
 		} else{
 			try{
 				const result = await queryHandler.deleteUser(_id);
+				RouteResponseHandler.sendResponse(request, response, {
+					statusCode: CONSTANTS.SERVER_OK_HTTP_CODE,
+					statusText: CONSTANTS.SERVER_OK_HTTP_TEXT,
+					isOkay: true,
+					message: CONSTANTS.DELETION_SUCESS,
+					response: {
+						data: result					
+					} ,
+				});
+			} catch(error){
+				RouteResponseHandler.sendResponse(request, response, {
+					statusCode: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_CODE,
+					statusText: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_TEXT,
+					isOkay: false,
+					message: error,
+					response: null,
+				});
+			}
+		}
+	}
+
+	/**
+	 * Responsible for deleting user from DB
+	 * @param {expressRequestObject} request
+	 * @param {expressResponseObject} response
+	 */
+	 async deleteStudent(request, response){
+		const _id = request.body.id;
+		if(!_id || _id === ''){
+			RouteResponseHandler.sendResponse(request, response, {
+				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
+				statusText: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_TEXT,
+				isOkay: false,
+				message: CONSTANTS.INVALID_PARAMETER,
+				response: null,
+			})
+		} else{
+			try{
+				const result = await queryHandler.deleteStudent(_id);
 				RouteResponseHandler.sendResponse(request, response, {
 					statusCode: CONSTANTS.SERVER_OK_HTTP_CODE,
 					statusText: CONSTANTS.SERVER_OK_HTTP_TEXT,

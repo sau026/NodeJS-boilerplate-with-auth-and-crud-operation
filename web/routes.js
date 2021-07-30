@@ -18,9 +18,13 @@ class Routes{
 	appRoutes(){
 		this.app.post('/login', routeHandler.checkUser);
 		this.app.post('/register', uploadFile.upload.single('image'), routeHandler.registerUser);
-		this.app.get('/getAllUser', VerifyToken, routeHandler.getAllUser);
+		this.app.get('/getAllUser', routeHandler.getAllUser);
 		this.app.put('/updateUser', VerifyToken, routeHandler.updateUser);
 		this.app.post('/deleteUser', VerifyToken, routeHandler.deleteUser);
+		this.app.post('/addStudent', VerifyToken, routeHandler.addStudent);
+		this.app.get('/getAllStudent',VerifyToken, routeHandler.getAllStudent);
+		this.app.post('/deleteStudent',VerifyToken, routeHandler.deleteStudent);
+		this.app.put('/updateStudent',VerifyToken, routeHandler.updateStudent);
 		/**
 		 * Handling 404 Route
 		 */
