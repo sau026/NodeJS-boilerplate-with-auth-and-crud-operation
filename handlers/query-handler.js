@@ -128,6 +128,26 @@ class QueryHandler {
 		});
 	}
 
+	deleteStudent(data) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const params = {
+					_id: ObjectId(data)
+				}
+				const [DB, ObjectID] = await this.Mongodb.onConnect();
+				DB.collection(CONSTANTS.MONGODB_STUDENT_COLLECTION_NAME).deleteOne(params, async (err, result) => {
+					DB.close();
+					if (err) {
+						reject(err);
+					}
+					resolve(result.deletedCount);
+				});
+			} catch (error) {
+				reject(error)
+			}
+		});
+	}
+
 	deleteUser(data) {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -142,6 +162,37 @@ class QueryHandler {
 					}
 					resolve(result.deletedCount);
 				});
+			} catch (error) {
+				reject(error)
+			}
+		});
+	}
+
+	updateStudent(data) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const id = {
+					_id: ObjectId(data.id)
+				}
+				const updateValue = {
+				}
+				const [DB, ObjectID] = await this.Mongodb.onConnect();
+				DB.collection(CONSTANTS.MONGODB_STUDENT_COLLECTION_NAME).updateOne(id,
+					{
+						$set: {
+							"name": data.name,
+							"standard": data.standard,
+							"passingYear": data.passingYear,
+							"percentage": data.percentage,
+						}
+					},
+					async (err, result) => {
+						DB.close();
+						if (err) {
+							reject(err);
+						}
+						resolve(result);
+					});
 			} catch (error) {
 				reject(error)
 			}
