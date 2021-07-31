@@ -25,6 +25,7 @@ class Routes{
 		this.app.get('/getAllStudent',VerifyToken, routeHandler.getAllStudent);
 		this.app.post('/deleteStudent',VerifyToken, routeHandler.deleteStudent);
 		this.app.put('/updateStudent',VerifyToken, routeHandler.updateStudent);
+		this.app.get('/getUserSpecificStudent',VerifyToken, routeHandler.getUserSpecificStudent);
 		/**
 		 * Handling 404 Route
 		 */

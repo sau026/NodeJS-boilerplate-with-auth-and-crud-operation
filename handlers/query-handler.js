@@ -10,7 +10,7 @@ class QueryHandler {
 		this.Mongodb = require("./../config/db");
 	}
 
-	checkUser(username, password) {
+	checkUser(username, password, loginType) {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const [DB, ObjectID] = await this.Mongodb.onConnect();
@@ -27,10 +27,12 @@ class QueryHandler {
 				// 	resolve(result);
 				// }))
 
+				console.log('saurabh asasas:::::::', username, password, loginType)
 				const allUSer = DB.collection(CONSTANTS.MONGODB_USER_COLLECTION_NAME)
 				allUSer.find({
 					"username": username,
-					"password": password
+					"password": password,
+					"loginType": loginType
 				}).toArray(function (err, result) {
 					DB.close();
 					if (err) {
@@ -127,6 +129,32 @@ class QueryHandler {
 			}
 		});
 	}
+
+		/**
+   * Responsible for getting all users the user into database
+   * @param {Object} email, password
+   * @returns {Promise} Object
+   */
+		 getUserSpecificStudent(data) {
+			return new Promise(async (resolve, reject) => {
+				try {
+					const [DB, ObjectID] = await this.Mongodb.onConnect();
+					const allUSer = DB.collection(CONSTANTS.MONGODB_STUDENT_COLLECTION_NAME)
+					allUSer.find({
+						addedBy: data
+					}).toArray(function (err, result) {
+						DB.close();
+						if (err) {
+							reject(err);
+						} else {
+							resolve(result);
+						}
+					})
+				} catch (error) {
+					reject(error)
+				}
+			});
+		}
 
 	deleteStudent(data) {
 		return new Promise(async (resolve, reject) => {
