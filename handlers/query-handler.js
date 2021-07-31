@@ -27,7 +27,6 @@ class QueryHandler {
 				// 	resolve(result);
 				// }))
 
-				console.log('saurabh asasas:::::::', username, password, loginType)
 				const allUSer = DB.collection(CONSTANTS.MONGODB_USER_COLLECTION_NAME)
 				allUSer.find({
 					"username": username,

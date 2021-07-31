@@ -15,8 +15,6 @@ class RouteHandler{
 		const password = request.body.password;
 		const loginType = request.body.loginType;
 
-		console.log('saurabh check data::::', request.body)
-
 		if(!username || username === ''){
 			RouteResponseHandler.sendResponse(request, response, {
 				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
