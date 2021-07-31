@@ -13,6 +13,10 @@ class RouteHandler{
 	async checkUser(request, response){
 		const username = request.body.username;
 		const password = request.body.password;
+		const loginType = request.body.loginType;
+
+		console.log('saurabh check data::::', request.body)
+
 		if(!username || username === ''){
 			RouteResponseHandler.sendResponse(request, response, {
 				statusCode: CONSTANTS.SERVER_REQUEST_ERROR_HTTP_CODE,
@@ -31,7 +35,7 @@ class RouteHandler{
 			})
 		} else{
 			try{
-				const result = await queryHandler.checkUser(username, password);
+				const result = await queryHandler.checkUser(username, password, loginType);
 				const token = jwt.sign({ 
 					'username' : username,
 					'id' : result[0]._id
@@ -241,6 +245,28 @@ class RouteHandler{
 				response: null,
 			});
 		}
+}
+
+async getUserSpecificStudent(request, response){
+	try{
+		const result = await queryHandler.getUserSpecificStudent(request.userId);
+		RouteResponseHandler.sendResponse(request, response, {
+			statusCode: CONSTANTS.SERVER_OK_HTTP_CODE,
+			statusText: CONSTANTS.SERVER_OK_HTTP_TEXT,
+			isOkay: true,
+			response: {
+				data: result					
+			} ,
+		});
+	} catch(error){
+		RouteResponseHandler.sendResponse(request, response, {
+			statusCode: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_CODE,
+			statusText: CONSTANTS.SERVER_INTERNAL_ERROR_HTTP_TEXT,
+			isOkay: false,
+			message: error,
+			response: null,
+		});
+	}
 }
 
 	/**
